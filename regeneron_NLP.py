@@ -59,7 +59,7 @@ def toPDF(eventid, df, myTeamsMessage):
 
     #Next connect to the main database that contains all the NOEs and query for them. 
     #This is my least favorite part of my program as I load all the NOEs and all of their metadata ... making it very slow. Another area to fix had I time enough.
-    conn = pymssql.connect(server="RHNALON15SQL03D", user="REGENERON\s.jack.lavelle", password=keyring.get_password("RHNSQL_s.jack", "s.jack.lavelle"), database="IOPS_Data_Warehouse")
+    conn = pymssql.connect(server="RHNALON15SQL03D", user="", password="", database="IOPS_Data_Warehouse")
     cursor = conn.cursor()
     query = """
         SELECT * FROM [IOPS_Data_Warehouse].[QProcess].[EventSearch_NOE]
@@ -193,7 +193,7 @@ def getScores(mylist): #meant to be used in conjunction with preppdf, retrieves 
 def prepdf(mylist): #prepares dataframe consisting of eventIDs and similiarity values.
     myDict = getScores(mylist)[0]
     eventIDs = getScores(mylist)[1]
-    conn = pymssql.connect(server="RHNALON15SQL03D", user="REGENERON\s.jack.lavelle", password=keyring.get_password("RHNSQL_s.jack", "s.jack.lavelle"), database="IOPS_Data_Warehouse")
+    conn = pymssql.connect(server="RHNALON15SQL03D", user="", password="", database="IOPS_Data_Warehouse")
     cursor = conn.cursor()
     query = """
     SELECT [EVENTID]
@@ -220,7 +220,7 @@ def prepdf(mylist): #prepares dataframe consisting of eventIDs and similiarity v
 
 def processNOE(eventid, desc):
     #Firstly, description of the NOE is fed into the NLP API ... returning JSON that contains a fixed number of NOEs and their event descriptions.
-    NLPurl = "http://dps-dss-176-074.itcorp.aws.regeneron.com:11000/public/api/v1/iops_sim/iops_sem_v1/run" #Information for API that interfaces with NLP model.
+    NLPurl = "http://mynlpurl.com/interestingurl" #Information for API that interfaces with NLP model.
     NLPquery = {"query" : desc}
     NLPheaders = {
       'Authorization': 'Basic Zll4b3pPSUNsc29oRWVTZmE3aGszOUVvaUdKV2FoQVU6',
@@ -310,17 +310,17 @@ def genTable(mydf, eventid):
 def emailReport(target, path, eventid, myEmailMessage):
     # Replace sender@example.com with your "From" address.
     # This address must be verified.
-    SENDER = 'jacklavelle17@gmail.com'  
+    SENDER = ""  
     SENDERNAME = 'Jack LaVelle'
     # Replace recipient@example.com with a "To" address. If your account.
     # is still in the sandbox, this address must be verified.
     RECIPIENT  = target
 
     # Replace smtp_username with your Amazon SES SMTP user name.
-    USERNAME_SMTP = "AKIAQLOW5RJTKDGZ2JBK"
+    USERNAME_SMTP = ""
 
     # Replace smtp_password with your Amazon SES SMTP password.
-    PASSWORD_SMTP = "BDRY4BYwH0y4/bLMzt0VGwBLxzhMH1qBVLxl3lI8Sou1"
+    PASSWORD_SMTP = ""
 
     # (Optional) the name of a configuration set to use for this message.
     # If you comment out this line, you also need to remove or comment out
@@ -391,9 +391,9 @@ def emailReport(target, path, eventid, myEmailMessage):
 def monitor():
     #The start of my program ... this is where I continously poll the change data capture database ... looking for new NOE databases. (again this is not actually implemented on the real SQL database).
     #In the actual implementation, this python program would be converted into a Windows service to run continously through AlwaysUp.
-    server = "regn-siera-dwh-sqlee1.cvmyu7sse9uu.us-east-1.rds.amazonaws.com"
-    user = "REGENERON\jack.lavelle"
-    password = keyring.get_password("jack.lavelle", "jack.lavelle") #NEVER store your real password (for example people have bots continously scanning GitHub for people who put their password in text).
+    server = ""
+    user = ""
+    password = "" 
     database = "cdc"
     query = """
     SELECT TOP (1000) [__$start_lsn]
